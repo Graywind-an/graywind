@@ -1,0 +1,5 @@
+- insert:
+    - id: dsh-digest
+      name: ./plugin/index.js
+      config:
+        note: digest

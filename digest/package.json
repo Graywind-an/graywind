@@ -1,0 +1,74 @@
+{
+  "name": "@local/dsh-digest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "title": "消化系统 · 嘴 + 消化",
+  "description": "吃进来之前那一段：嘴只读声明（体积按类型比 / 依赖 / install 钩子 / 危险词 / 仿冒 / 二进制），只有拦截权；消化真读源码（暗门 / 混淆 / 外连 / 读凭证 / 写系统位置 / 提权 / 改提示词）、摸清注册面、声明对实际。只出报告，不做放行判断。",
+  "main": "./plugin/index.js",
+  "exports": {
+    ".": "./plugin/index.js",
+    "./消化": "./消化.mjs",
+    "./核心/尝": "./核心/尝.mjs",
+    "./核心/配置": "./核心/配置.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "plugin/index.js",
+    "消化.mjs",
+    "消化系统.mjs",
+    "核心/尝.mjs",
+    "核心/配置.mjs",
+    "核心/排泄.mjs",
+    "核心/建立.mjs",
+    "核心/镜像.mjs",
+    "模板/假模型.mjs",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "README.en.md",
+    "LICENSE",
+    "_smoke.mjs"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": ">=0.2.0"
+  },
+  "scripts": {
+    "test": "node _smoke.mjs",
+    "smoke": "node _smoke.mjs",
+    "env": "node 消化系统.mjs 配置"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "plugin",
+    "supply-chain",
+    "security",
+    "audit",
+    "static-analysis",
+    "source-review",
+    "digest"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graywind-an/graywind.git",
+    "directory": "digest"
+  },
+  "homepage": "https://github.com/graywind-an/graywind/tree/main/digest#readme",
+  "bugs": {
+    "url": "https://github.com/graywind-an/graywind/issues"
+  },
+  "license": "MIT",
+  "author": "graywind-an"
+}
