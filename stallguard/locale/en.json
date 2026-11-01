@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Stallguard",
+    "description": "Catches a model repeating the same passage without progress: cuts the stream mid-flight and steers a correction, instead of burning the context or waiting for a manual stop."
+  }
+}

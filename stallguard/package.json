@@ -1,0 +1,65 @@
+{
+  "name": "@local/dsh-reasoning-guard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "title": "兜圈子刹车 · reasoning 原地打转检测",
+  "description": "五条规则抓「在重复、没进展」：窗口（字汇密度塌了）· 连续相同 chunk · 字符级精确周期 · 短语池 · 跨调用复述。流内切断 + escalate 三档（warn/steer/cancel），可选切断后自动续跑。",
+  "main": "plugin/index.js",
+  "exports": {
+    ".": "./plugin/index.js",
+    "./detector": "./plugin/detector.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "plugin/index.js",
+    "plugin/detector.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "_selftest.mjs",
+    "_smoke.mjs"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": ">=0.2.0"
+  },
+  "scripts": {
+    "test": "node _selftest.mjs && node _smoke.mjs",
+    "selftest": "node _selftest.mjs",
+    "smoke": "node _smoke.mjs"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "plugin",
+    "guard",
+    "thinking-loop",
+    "reasoning",
+    "repetition",
+    "circuit-breaker",
+    "stallguard"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graywind-an/graywind.git",
+    "directory": "stallguard"
+  },
+  "homepage": "https://github.com/graywind-an/graywind/tree/main/stallguard#readme",
+  "bugs": {
+    "url": "https://github.com/graywind-an/graywind/issues"
+  },
+  "license": "MIT",
+  "author": "graywind-an"
+}

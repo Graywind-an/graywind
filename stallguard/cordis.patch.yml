@@ -1,0 +1,61 @@
+# 让「正在兜圈子」这件事在兜的途中就能看见。
+# 2026-10-25：那次 reasoning 转 67172 字符、正文 0 字符，到喊停才落地。
+# 2026-11-01 v0.2：加三条规则（周期 / 短语池 / 跨调用），并能在流里切断。
+- insert:
+    - id: dsh-reasoning-guard
+      name: ./plugin/index.js
+      config:
+        # ===== 规则 1：窗口（2026-10-25 标定，保留）=====
+        # 每 2000 字符算一次"体温"
+        windowChars: 2000
+        # 窗口内不重复字符数低于它算贫瘠。
+        # 拿 969 个真实窗口标定：坏的落在 13~39，正常的从 60 往上堆，50 在交界带
+        minUniqueChars: 50
+        # 连续几个贫瘠窗口才动手。
+        # 2026-10-25 晚上线时刻意从 3 调到 5（真刹车要留余量）。
+        # 代价：cancel() 会 abort 当前 phase、清空 inbox。
+        # 真吞了一条真实用户消息，第一个怀疑这里——先改 dryRun: true 看日志。
+        barrenWindows: 5
+
+        # ===== 规则 2b：连续相同 chunk（v0.2.1，吸收原版 identical-chunks）=====
+        # provider 常把「做。」拆成「做」+「。」；同一 payload 连续 60 次就切。
+        # 60 次 × 2 字符 = 120 字符，比窗口规则早两个数量级。
+        maxRepeatedText: 60
+
+        # ===== 规则 2：字符级精确周期（v0.2）=====
+        # 尾部是不是「一段短周期在精确重复」。精确 = 近似重复不算；
+        # 周期里至少两个不同字符（`=====` 分隔线不算循环）。
+        # 推理用 512/512：实测真循环周期 89~409 字符，上限必须高过所有观测到的周期。
+        cycleMaxPeriod: 512
+        cycleMinSpan: 512
+        cycleMinDistinct: 2
+        # 正文用更短的跨度：正文重复比推理重复少见，可以下手早一点。
+        textCycleMinSpan: 256
+
+        # ===== 规则 3：短语池（v0.2）=====
+        # 同一批短句重排（周期规则抓不到这种形状）。
+        # 阈值来自真实现场：26 个短语、5,569 次出现、重复质量 44,995 字符、
+        # 覆盖率 0.993、集中度 214——三条阈值全被一个数量级越过。
+        poolMinChars: 2048
+        poolMinCoverage: 0.6
+        poolMinConcentration: 4
+
+        # ===== 规则 4：跨调用复述（v0.2）=====
+        # 本步 reasoning 的 4-gram 被上一步包含 ≥0.8 = 同一结论换说法；
+        # 连续 3 步算一段空转；最多打 4 次（不 latch）。
+        crossCallThreshold: 0.8
+        crossCallSteps: 3
+        crossCallFires: 4
+
+        # ===== 反应 =====
+        # 后判类触发（窗口规则/跨调用）的反应分档（原版 escalate）：
+        #   warn = 只注入提示；steer = 注入纠正并续跑；cancel = 中止本轮（带 keepInbox）
+        escalate: steer
+        # 切断后自动续跑（原版 resumeAfterBreak）。默认关：坏模型不能悄悄重复计费。
+        resumeAfterBreak: false
+        # 切断的错误码，写进日志方便事后核对（原版 breakCode）。
+        breakCode: REPETITIVE_OUTPUT
+        # false = 真动作。true = 只记日志（排查时用）。
+        dryRun: false
+        # 流内切断总开关：相同 chunk/周期/短语池命中时关块 + finish{stop} + steer 纠正。
+        breakOnRepetition: true
