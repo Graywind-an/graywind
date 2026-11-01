@@ -1,0 +1,9 @@
+node_modules/
+*.log
+*.tmp
+.bak*
+.DS_Store
+
+# 体检报告是运行时产物，不进版本库
+revive/体检报告/
+revive/_修前备份/
