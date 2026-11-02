@@ -17,7 +17,7 @@
   revive.cmd              ← 双击它（给人用的入口）
   revive.ps1              ← 菜单程序（不用改）
   revive-config.json      ← 按钮表 + 路径（第 3 节要改它）
-  checkup.ps1             ← 体检脚本（8 项 00~07）
+  checkup.ps1             ← 体检脚本（9 项 00~08）
   清cookie并启动.cmd       ← 崩溃原因清单第 1 条的修法
   保护区\                  ← 受保护文件的副本（第 4 节会同步进去）
   给AI的说明书.md          ← 你手上这份
@@ -325,16 +325,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\Desktop\�
 
 | # | 验什么 | 怎么验 | 过了是什么样 |
 |---|---|---|---|
-| 1 | 体检能跑、8 项带编号 | `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\Desktop\复活\checkup.ps1" -NoPause` | 有 `[00]`…`[07]` 共 8 行，每行带「正常/注意/异常/致命」 |
+| 1 | 体检能跑、9 项带编号 | `powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\Desktop\复活\checkup.ps1" -NoPause` | 有 `[00]`…`[08]` 共 9 行，每行带「正常/注意/异常/致命」 |
 | 2 | 程序本体对得上 | 看 `[01]` | 「app.asar 在，175.5 MB」这类（数字和实际一致） |
 | 3 | profile 配置齐 | 看 `[02]` | 「package.json 在，cordis.patch.yml 在，bundles N 个」，N ≥ 2 |
 | 4 | 镜像是完整的 | 看 `[04]` | 「在：<X>:\复活镜像；app.asar …，profiles 和 工作区 都在」 |
 | 5 | 纯净区能起 | 看 `[05]` | 「依赖齐（有 @deepseek-ai，能起）」 |
 | 6 | 受保护的文件都在 | 看 `[06]` | 「5 项都在，没有 0 字节的」 |
 | 7 | 保护区同步了 | 第 4 节那次 `-Fix 07` 之后再跑一次体检，看 `[07]` | 「N 项都在，和源文件大小一致」 |
-| 8 | 菜单能用 | 双击 `revive.cmd` | 出 `[1] [2] [3] [4] [5] [00]` 六个键；按 `0` 退出 |
+| 8 | 菜单能用 | 双击 `revive.cmd` | 出 `[1]`…`[9]` 再加 `[00]`，共 10 个键；按 `0` 退出 |
 | 9 | 修只动该动的 | 先记 `<工作区>\CORE.md` 的 `LastWriteTime`，跑一次 `checkup.ps1 -Fix 07`，再看 | CORE.md 的时间**没变**；`复活\_修前备份\<时间>\07\` 里出现 `CORE.md` 的备份（第一次同步时保护区里还没有旧件，所以那一次可能没有备份目录 —— **没有也不算错**） |
 | 10 | 镜像真能起（可选，但要登出） | 双击 `${X}:\复活镜像\启动镜像DSH.cmd` | 出现登录页；**登进登出一次**再关掉 |
+| 11 | 按编码修只动一项（按钮 `7`） | 记下某个受保护文件的 `LastWriteTime`，跑一次 `checkup.ps1 -Fix 02`，再看 | 只有 `[02]` 那项被修；别的文件时间一点没变 |
+| 12 | 恢复插件库只补缺（按钮 `8`） | 按 `8` | 缺的补回来；已有的不动（要覆盖必须显式加 `-Overwrite`） |
+| 13 | 单字循环能查（按钮 `9`） | 按 `9` | 跑一遍 stallguard 离线检查，列出会话和命中数（不需要 DSH 在跑） |
 
 第 9 条是唯一「自己动手也能验、但不动源文件」的自检 —— **过了才算装对**。
 
@@ -355,7 +358,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\Desktop\�
 
 ---
 
-## 附：体检 8 项是什么
+## 附：体检 9 项是什么
 
 | 编号 | 项 | 查什么 | 能修 |
 |---|---|---|---|

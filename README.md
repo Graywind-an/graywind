@@ -1,5 +1,7 @@
 # graywind
 
+> 中文完整版（更详细）：[README.zh.md](README.zh.md)
+
 **解决 DeepSeek Harness 在日常使用中出现的常见崩溃问题，以及预防措施和一键复活脚本。**
 
 **Solves the common crash problems that show up in daily DeepSeek Harness use — plus prevention, and a one-click rescue kit.**
